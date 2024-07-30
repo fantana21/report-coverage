@@ -1,4 +1,4 @@
-# Set up vcpkg
+# Report coverage
 
 [![CI badge][1]][2]
 
