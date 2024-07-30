@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy "fake" coverage reports to expected locations
+        shell: bash
+        run: |
+          mkdir -p build/ci-coverage
+          cp -r .github/data/* build/ci-coverage
+
+      - name: Report coverage results as job summary, PR comment, and artifact
+        uses: ./
