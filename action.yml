@@ -4,7 +4,7 @@ author: Patrick Kappl
 
 inputs:
   add-job-summary:
-    default: true
+    default: 'true'
     required: false
     description: Show markdown coverage report as job summary
 
@@ -14,7 +14,7 @@ inputs:
     description: Path to the markdown coverage report
 
   add-pr-comment:
-    default: true
+    default: 'true'
     required: false
     description: Show markdown coverage report as sticky PR comment
 
@@ -24,7 +24,7 @@ inputs:
     description: Header to distinguish multiple PR comments
 
   upload-artifact:
-    default: true
+    default: 'true'
     required: false
     description: Upload coverage report(s) as job artifact
 
@@ -44,14 +44,14 @@ runs:
   using: composite
   steps:
     - name: Show Markdown coverage report as job summary
-      if: ${{ inputs.add-job-summary }}
+      if: ${{ inputs.add-job-summary == 'true' }}
       shell: pwsh
       env:
         MARKDOWN_PATH: ${{ inputs.markdown-path }}
       run: cat ${{ env.MARKDOWN_PATH }} > $env:GITHUB_STEP_SUMMARY
 
     - name: Show Markdown coverage report as sticky PR comment
-      if: ${{ inputs.add-pr-comment && github.event_name == 'pull_request' }}
+      if: ${{ inputs.add-pr-comment == 'true' && github.event_name == 'pull_request' }}
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         header: ${{ inputs.pr-comment-header }}
@@ -59,7 +59,7 @@ runs:
         path: ${{ inputs.markdown-path }}
 
     - name: Upload coverage reports as job artifact
-      if: ${{ inputs.upload-artifact }}
+      if: ${{ inputs.upload-artifact == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
